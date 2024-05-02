@@ -1,0 +1,183 @@
+<ui:composition template="/WEB-INF/template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="estilo2" value="current" />
+
+	<ui:define name="title">
+        Gestor incidencias
+    </ui:define>
+
+	<ui:define name="content">
+		<div class="row">
+			<div class="col-12">
+				<div class="content">
+					<div class="card crud-demo">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true" />
+							
+							<p:dataTable id="dt-products" widgetVar="dtProducts"
+								var="incidencia" value="#{gestionarIncidenciasWeb.incidencias}"
+								reflow="true" styleClass="products-table"
+								selection="#{gestionarIncidenciasWeb.incidenciasSeleccionadas}"
+								rowKey="#{incidencia.idIncidencia}" paginator="true" rows="10"
+								rowSelectMode="add" paginatorPosition="bottom">
+								<f:facet name="header">
+									<div class="products-table-header">
+										<span style="font-weight: bold">INCIDENCIAS</span> <span
+											class="filter-container ui-input-icon-left"> <i
+											class="pi pi-search"></i> <p:inputText id="globalFilter"
+												onkeyup="PF('dtProducts').filter()" placeholder="Buscar" />
+										</span>
+									</div>
+								</f:facet>
+								
+								<!-- CABECERAS  -->
+								<p:column headerText="ID bicicleta"
+									sortBy="#{incidencia.idBicicleta}"
+									filterBy="#{incidencia.idBicicleta}">
+									<h:outputText value="#{incidencia.idBicicleta}" />
+								</p:column>
+								<p:column headerText="ID incidencia"
+									sortBy="#{incidencia.idIncidencia}"
+									filterBy="#{incidencia.idIncidencia}">
+									<h:outputText value="#{incidencia.idIncidencia}" />
+								</p:column>
+								<p:column headerText="estado" sortBy="#{incidencia.estado}"
+									filterBy="#{incidencia.estado}">
+									<h:outputText value="#{incidencia.estado}" />
+								</p:column>
+								<p:column headerText="fecha" sortBy="#{incidencia.fecha}"
+									filterBy="#{incidencia.fecha}">
+									<h:outputText value="#{incidencia.fecha}" />
+								</p:column>
+								<p:column headerText="descripcion"
+									sortBy="#{incidencia.descripcion}"
+									filterBy="#{incidencia.descripcion}">
+									<h:outputText value="#{incidencia.descripcion}" />
+								</p:column>
+
+								<p:column exportable="false">
+									<p:commandButton
+										value="Cancelar"
+										update=":dialogs:cancelar-incidencia"
+										oncomplete="PF('cancelarIncidencia').show()"
+										styleClass="edit-button rounded-button ui-button-danger"
+										process="@this">
+										<f:setPropertyActionListener value="#{incidencia}"
+											target="#{gestionarIncidenciasWeb.incidenciaSeleccionada}" />
+										<p:resetInput target=":dialogs:cancelar-incidencia" />
+									</p:commandButton>
+									<p:commandButton
+										value="Asignar"
+										update=":dialogs:asignar-incidencia"
+										oncomplete="PF('asignarIncidencia').show()"
+										styleClass="edit-button rounded-button ui-button-help"
+										process="@this">
+										<f:setPropertyActionListener value="#{incidencia}"
+											target="#{gestionarIncidenciasWeb.incidenciaSeleccionada}" />
+										<p:resetInput target=":dialogs:asignar-incidencia" />
+									</p:commandButton>
+									<p:commandButton
+										value="Resolver"
+										update=":dialogs:resolver-incidencia"
+										oncomplete="PF('resolverIncidencia').show()"
+										styleClass="edit-button rounded-button ui-button-succes"
+										process="@this">
+										<f:setPropertyActionListener value="#{incidencia}"
+											target="#{gestionarIncidenciasWeb.incidenciaSeleccionada}" />
+										<p:resetInput target=":dialogs:resolver-incidencia" />
+									</p:commandButton>	
+								</p:column>
+							</p:dataTable>
+						</h:form>
+
+						<!-- CAMPOS  -->
+						<h:form id="dialogs">
+							<!-- CANCELAR -->
+							<p:dialog header="Cancelar incidencia" showEffect="fade" modal="true"
+								widgetVar="cancelarIncidencia" responsive="true">
+								<p:outputPanel id="cancelar-incidencia" class="ui-fluid">
+									<p:outputPanel
+										rendered="#{not empty gestionarIncidenciasWeb.incidenciaSeleccionada}">
+										<div class="field">
+											<p:outputLabel for="motivo-cancelar">Motivo</p:outputLabel>
+											<p:inputText id="motivo-cancelar"
+												value="#{gestionarIncidenciasWeb.incidenciaSeleccionada.motivo}"
+												required="true" />
+										</div>
+									</p:outputPanel>
+								</p:outputPanel>							
+								<f:facet name="footer">
+									<p:commandButton value="Enviar" icon="pi pi-check"
+										actionListener="#{gestionarIncidenciasWeb.cancelarIncidencia}"/>
+									<p:commandButton value="Cancel" icon="pi pi-times"
+										onclick="PF('cancelarIncidencia').hide()"
+										class="ui-button-secondary" type="button" />
+								</f:facet>
+							</p:dialog>
+							<!-- ASIGNAR -->
+							<p:dialog header="Asignar incidencia" showEffect="fade" modal="true"
+								widgetVar="asignarIncidencia" responsive="true">
+								<p:outputPanel id="asignar-incidencia" class="ui-fluid">
+									<p:outputPanel
+										rendered="#{not empty gestionarIncidenciasWeb.incidenciaSeleccionada}">
+										<div class="field">
+											<p:outputLabel for="operario">Operario</p:outputLabel>
+											<p:inputText id="operario"
+												value="#{gestionarIncidenciasWeb.incidenciaSeleccionada.operario}"
+												required="true" />
+										</div>
+									</p:outputPanel>
+								</p:outputPanel>
+								<f:facet name="footer">
+									<p:commandButton value="Enviar" icon="pi pi-check"
+										actionListener="#{gestionarIncidenciasWeb.asignarIncidencia}"/>
+									<p:commandButton value="Cancel" icon="pi pi-times"
+										onclick="PF('asignarIncidencia').hide()"
+										class="ui-button-secondary" type="button" />
+								</f:facet>							
+							</p:dialog>
+							<!-- RESOLVER -->
+							<p:dialog header="Resolver incidencia" showEffect="fade" modal="true"
+								widgetVar="resolverIncidencia" responsive="true">
+								<p:outputPanel id="resolver-incidencia" class="ui-fluid">
+									<p:outputPanel
+										rendered="#{not empty gestionarIncidenciasWeb.incidenciaSeleccionada}">
+										<div class="field">
+											<p:outputLabel for="motivo-resolver">Motivo</p:outputLabel>
+											<p:inputText id="motivo-resolver"
+												value="#{gestionarIncidenciasWeb.incidenciaSeleccionada.motivo}"
+												required="true" />
+										</div>
+										<div class="field">
+											 <p:outputLabel for="reparada">Reparada</p:outputLabel>
+              								 <p:selectBooleanCheckbox id="reparada" value="#{gestionarIncidenciasWeb.incidenciaSeleccionada.reparada}" />
+										</div>
+									</p:outputPanel>
+								</p:outputPanel>
+								<f:facet name="footer">
+									<p:commandButton value="Enviar" icon="pi pi-check"
+										actionListener="#{gestionarIncidenciasWeb.resolverIncidencia}"/>
+									<p:commandButton value="Cancel" icon="pi pi-times"
+										onclick="PF('resolverIncidencia').hide()"
+										class="ui-button-secondary" type="button" />
+								</f:facet>							
+							</p:dialog>
+							<p:confirmDialog global="true" showEffect="fade" width="300">
+								<p:commandButton value="Yes" type="button"
+									styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+								<p:commandButton value="No" type="button"
+									styleClass="ui-confirmdialog-no ui-button-secondary"
+									icon="pi pi-times" />
+							</p:confirmDialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

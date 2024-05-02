@@ -1,0 +1,49 @@
+<ui:composition template="/WEB-INF/template/template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:param name="estilo2" value="current" />
+
+    <ui:define name="title">
+        Buscador de Bicicletas
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <h:panelGrid columns="2">
+                <h:outputLabel for="latitud">Latitud:</h:outputLabel>
+                <p:inputText id="latitud" value="#{buscadorBicicletaWeb.latitud}" required="true"/>
+
+                <h:outputLabel for="longitud">Longitud:</h:outputLabel>
+                <p:inputText id="longitud" value="#{buscadorBicicletaWeb.longitud}" required="true"/>
+
+                <p:commandButton value="Buscar Bicicletas"
+                                 action="#{buscadorBicicletaWeb.buscarBicicletas}"
+                                 update="resultadosTabla"/>
+
+                <!-- Agregar mensajes de validación -->
+                <p:message for="latitud"/>
+                <p:message for="longitud"/>
+            </h:panelGrid>
+
+            <p:outputPanel id="resultadosTabla">
+                <!-- Aquí se mostrarán los resultados de la búsqueda -->
+                <p:dataTable var="bicicleta" value="#{buscadorBicicletaWeb.listaBicicletas}">
+                    <p:column headerText="ID">
+                        <h:outputText value="#{bicicleta.id}"/>
+                    </p:column>
+                    <p:column headerText="Modelo">
+                        <h:outputText value="#{bicicleta.modelo}"/>
+                    </p:column>
+                    <p:column headerText="Estación">
+                        <h:outputText value="#{bicicleta.estacion}"/>
+                    </p:column>
+                    <!-- Agregar más columnas según la estructura de los objetos Bicicleta -->
+                </p:dataTable>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

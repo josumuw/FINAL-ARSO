@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/WEB-INF/template/template.xhtml">
+        <ui:define name="title">
+            Inicio
+        </ui:define>
+        
+        <ui:define name="content">
+            <section id="banner" class="box container">
+                <div class="row">
+                    <div class="col-7 col-12-medium">
+                        <h2>#{text['index.banner.titulo']}</h2>
+                        <strong>
+                            <p>#{text['index.banner.texto']}</p>
+                        </strong>
+                    </div>
+                    <div class="col-5 col-12-medium">
+                        <ul>
+                            <li>
+                                <h:link class="button large icon solid fa-arrow-circle-right" value="#{text['index.banner.login']}" outcome="login.xhtml" />
+                            </li>
+                             <li>
+                                <h:link class="button large icon solid fa-arrow-circle-right" value="#{text['index.banner.signup']}" outcome="registro.xhtml" />
+                            </li>
+                            <li>
+    							<a class="button alt large icon solid fa-question-circle" href="https://github.com/josumuw/citybike/blob/main/README.md" target="_blank">
+        							#{text['index.banner.ayuda']}
+    							</a>
+							</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Intro -->
+            <div class="row"></div>
+        </ui:define>
+    </ui:composition>
+</html>

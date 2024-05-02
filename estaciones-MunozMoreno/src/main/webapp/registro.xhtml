@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/WEB-INF/template/template.xhtml">
+        <ui:define name="title">
+            Registro
+        </ui:define>
+        
+        <ui:define name="content">
+            <form method="POST" action="ServletRegistro">
+                <div>
+                    <label>Nombre:</label> 
+                    <input name="nombre" />
+                </div>
+                <div>
+                    <label>Usuario:</label> 
+                    <input name="username" />
+                </div>
+                <div>
+                    <label>Clave: </label> 
+                    <input type="password" name="clave" />
+                </div>
+                <div>
+                    <label>Tipo de usuario:</label>
+                    <select name="rol">
+                        <option value="cliente">Cliente</option>
+                        <option value="gestor">Gestor</option>
+                    </select>
+                </div>
+                <input type="submit" value="Enviar" />
+            </form>
+        </ui:define>
+    </ui:composition>
+</html>

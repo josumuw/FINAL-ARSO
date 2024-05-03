@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.OpenApi.Models;
 using Usuarios.Repositorio;
 using Usuarios.Servicio;
-using Usuarios.Modelo;
-using Usuarios.Repositorio;
 using Tokens.Repositorio;
 using Tokens.Servicio;
 
@@ -50,7 +48,7 @@ namespace UsuariosAPI
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "UsuariosApi v1"));
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             
             app.UseRouting();
 

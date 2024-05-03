@@ -15,7 +15,7 @@ public interface IServicioUsuarios {
     string Create(string token, Usuario usuario);
     void Delete(string id);
     string Activar(string id);
-    Claims Autenticar(string id, string password);
+    Claims AutenticarLogin(string id, string password);
     Claims AutenticarOAuth2(string idOAuth2);
     List<Usuario> GetAll();
 }
@@ -61,7 +61,7 @@ public class ServicioUsuarios : IServicioUsuarios
         string idToken = servicioTokens.Get(id);
         return idToken;
     }
-    public Claims Autenticar(string id, string password)
+    public Claims AutenticarLogin(string id, string password)
     {
         if (id == null || id == "")
                 throw new ArgumentException("El id del usuario no debe ser vacío");

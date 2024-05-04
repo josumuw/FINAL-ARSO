@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Usuarios.Servicio;
 using Usuarios.Modelo;
-using System.Security.Claims;
 
 namespace UsuariosApi.Controllers
 {
@@ -37,58 +36,59 @@ namespace UsuariosApi.Controllers
             _servicio.Delete(id);
             return Content("DELETE");
         }
-        [HttpPost("/login")]
-        public ActionResult<String> Autenticar([FromForm] UsuarioLoginDTO dto)
+        [HttpPost("login")]
+        public ActionResult<Dictionary<string, string>> AutenticarLogin([FromBody] LoginDTO request)
         {
-            if (dto.IdOAuth2 != null)
+            //TODO: COMPROBAR REQUEST PARAMS ANTES DE PASARLOS
+            String id = request.Id;
+            String password = request.Password;
+
+            Dictionary<string, string> claims = _servicio.AutenticarLogin(id, password);
+
+            if (claims != null && claims.Count > 0)
             {
-                Claims claims = _servicio.AutenticarOAuth2(dto.IdOAuth2);
-                 if (claims != null)
-                 {
-                    return Ok(claims);
-                 }
-                 else
-                 {
-                    return NotFound();
-                 }
-            }
-            else if (dto.UserName != null && dto.Password != null)
-            {
-                 Claims claims = _servicio.Autenticar(dto.UserName, dto.Password);
-                 if (claims != null)
-                 {
-                    return Ok(claims);
-                 }
-                 else
-                 {
-                    return NotFound();
-                 }
+                return Ok(claims);
             }
             else
             {
-                return BadRequest("El DTO debe contener al menos uno de los atributos Password o IdOAuth2.");
+                return NotFound();
+            }
+        } 
+        
+        [HttpPost("oauth2")]
+        public ActionResult<Dictionary<string, string>> AutenticarOAuth2([FromBody] OAuth2DTO request)
+        {
+            string id = request.Id;
+            Dictionary<string, string> claims = _servicio.AutenticarOAuth2(id);
+            if (claims != null && claims.Count > 0)
+            {
+                return Ok(claims);
+            }
+            else
+            {
+                return NotFound();
             }
         }
 
-        [HttpPost("/tokens")]
+        [HttpPost("tokens")]
         public IActionResult Activar([FromForm] string id)
         {
             _servicio.Activar(id);
             return Content("ACTIVATE");
         }
+
         [HttpGet]
         public IActionResult GetAll() 
         {
             List<Usuario> usuarios = _servicio.GetAll();
             if (usuarios != null)
             {
-                return Ok(usuarios); // Devuelve un código 200 OK con la lista de usuarios
+                return Ok(usuarios);
             }
             else
             {
-                return NotFound(); // Devuelve un código 404 Not Found si no se encontraron usuarios
+                return NotFound();
             }
         }
-
     }
 }

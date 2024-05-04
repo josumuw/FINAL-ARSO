@@ -4,19 +4,12 @@ using Tokens.Servicio;
 
 namespace Usuarios.Servicio 
 {
-public class Claims
-{
-    public string Id { get; set; }
-    public string NombreCompleto { get; set; }
-    public string Rol { get; set; }
-}
-
 public interface IServicioUsuarios {
     string Create(string token, Usuario usuario);
     void Delete(string id);
     string Activar(string id);
-    Claims AutenticarLogin(string id, string password);
-    Claims AutenticarOAuth2(string idOAuth2);
+    Dictionary<string, string> AutenticarLogin(string id, string password);
+    Dictionary<string, string> AutenticarOAuth2(string idOAuth2);
     List<Usuario> GetAll();
 }
 
@@ -50,7 +43,6 @@ public class ServicioUsuarios : IServicioUsuarios
         {
             throw new KeyNotFoundException(); 
         }
-        Console.Write("---------------------------------");
         Console.Write(usuario);
         repositorio.Delete(usuario);
     }
@@ -61,7 +53,7 @@ public class ServicioUsuarios : IServicioUsuarios
         string idToken = servicioTokens.Get(id);
         return idToken;
     }
-    public Claims AutenticarLogin(string id, string password)
+    public Dictionary<string, string> AutenticarLogin(string id, string password)
     {
         if (id == null || id == "")
                 throw new ArgumentException("El id del usuario no debe ser vacío");
@@ -76,14 +68,15 @@ public class ServicioUsuarios : IServicioUsuarios
         {
             throw new Exception("Contraseña incorrecta.");
         }
-        return new Claims
-        {
-            Id = usuario.Id,
-            NombreCompleto = usuario.NombreCompleto,
-            Rol = usuario.Rol.ToString()
-        };
+
+        // Crear claims usuario.
+        var claimsDict = new Dictionary<string, string>();
+        claimsDict.Add("Id", usuario.Id);
+        claimsDict.Add("NombreCompleto", usuario.NombreCompleto);
+        claimsDict.Add("Rol", usuario.Rol.ToString());
+        return claimsDict;
     }
-    public Claims AutenticarOAuth2(string idOAuth2)
+    public Dictionary<string, string> AutenticarOAuth2(string idOAuth2)
     {
         Usuario usuario = repositorio.GetByIdOAuth2(idOAuth2);
         if (usuario == null)
@@ -94,12 +87,11 @@ public class ServicioUsuarios : IServicioUsuarios
         {
             throw new Exception("IdOAuth incorrecto.");
         }
-        return new Claims
-        {
-            Id = usuario.Id,
-            NombreCompleto = usuario.NombreCompleto,
-            Rol = usuario.Rol.ToString()
-        };
+        var claimsDict = new Dictionary<string, string>();
+        claimsDict.Add("Id", usuario.Id);
+        claimsDict.Add("NombreCompleto", usuario.NombreCompleto);
+        claimsDict.Add("Rol", usuario.Rol.ToString());
+        return claimsDict;
     }
     public List<Usuario> GetAll()
     {

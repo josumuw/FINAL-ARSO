@@ -1,9 +1,9 @@
 package pasarela.servicios;
 
-import pasarela.modelo.Claims;
+import java.util.Map;
 
 public interface IServicioUsuarios {
 
-    public Claims autenticarLogin(String username, String password) throws ServicioUsuariosException;
-    public Claims autenticarOAuth2(String id) throws ServicioUsuariosException;
+    public Map<String, String> autenticarLogin(String username, String password) throws ServicioUsuariosException;
+    public Map<String, String> autenticarOAuth2(String id) throws ServicioUsuariosException;
 }
